@@ -69,6 +69,16 @@
         .rec-content ul, .rec-content ol { list-style: none; margin: 0.25rem 0; padding-left: 1.15rem; }
         .rec-item { margin: 0.25rem 0; padding-left: 1.15rem; }
 
+        /* Экспорт плана */
+        .rec-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.7rem; margin-bottom: 1.2rem; }
+        .rec-actions .btn { padding: 0.55rem 1.15rem; font-size: 0.9rem; }
+        .rec-hint { font-size: 0.78rem; color: #7892a8; }
+
+        .hidden { display: none !important; }
+
+        /* Шапка печатной версии — на экране не видна */
+        .print-head { display: none; }
+
         .footer-note {
             text-align: center; font-size: 0.85rem; color: #7892a8;
             padding: 2rem 0 1rem; border-top: 1px solid #dbe6f0;
@@ -79,5 +89,68 @@
             .controls { padding: 1.2rem; }
             .actions { flex-direction: column; align-items: stretch; }
             .btn { width: 100%; }
+        }
+
+        /* Печать и сохранение в PDF */
+        @page { size: A4; margin: 15mm; }
+
+        @media print {
+            html, body {
+                background: #fff !important;
+                padding: 0 !important;
+                font-size: 11pt;
+                line-height: 1.45;
+                color: #000;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .container { max-width: none; margin: 0; padding: 0; }
+
+            /* Служебные блоки на бумагу не попадают */
+            .header, .controls, .footer-note, .rec-actions { display: none !important; }
+
+            .recommendations {
+                display: block !important;
+                background: none !important;
+                border: none !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .recommendations h2 { display: none !important; }
+
+            /* Шапка печатной версии */
+            .print-head {
+                display: block !important;
+                margin: 0 0 6mm;
+                padding-bottom: 3mm;
+                border-bottom: 1.5pt solid #1d4e6f;
+            }
+            .print-title { font-size: 16pt; font-weight: 700; color: #0b2b44; }
+            .print-meta { font-size: 10pt; color: #5b7a94; margin-top: 1.5mm; }
+
+            /* Сам план */
+            .rec-content { white-space: normal; font-size: 11pt; line-height: 1.45; }
+            .rec-content h3 {
+                font-size: 13pt; margin: 6mm 0 2mm;
+                break-after: avoid; page-break-after: avoid;
+            }
+            .rec-content h4 {
+                font-size: 11.5pt; margin: 4mm 0 1.5mm;
+                break-after: avoid; page-break-after: avoid;
+            }
+            .rec-content strong { color: #000; }
+            .rec-content em { color: #333; }
+
+            /* Пункт списка не разрывается между страницами */
+            .rec-item {
+                margin: 1.5mm 0;
+                break-inside: avoid; page-break-inside: avoid;
+            }
+
+            /* Пустые строки-разделители на бумаге лишние */
+            .rec-content br { display: none !important; }
+            .rec-content div { orphans: 2; widows: 2; }
         }
     

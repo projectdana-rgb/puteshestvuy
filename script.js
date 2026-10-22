@@ -12,6 +12,11 @@
         status: document.getElementById('status'),
         recBox: document.getElementById('recBox'),
         recContent: document.getElementById('recContent'),
+        recActions: document.getElementById('recActions'),
+        printBtn: document.getElementById('printBtn'),
+        pdfBtn: document.getElementById('pdfBtn'),
+        printTitle: document.getElementById('printTitle'),
+        printMeta: document.getElementById('printMeta'),
     };
 
     function setStatus(text, isError = false) {
@@ -64,6 +69,7 @@
         setStatus('Запрос к DeepSeek...');
         els.recBox.classList.remove('visible');
         els.recContent.textContent = '';
+        updateExportButtons();
 
         try {
             const response = await fetch(DEEPSEEK_URL, {
@@ -99,6 +105,7 @@
             // Простейшая разметка: строки, начинающиеся с #, ##, ### → заголовки
             els.recContent.innerHTML = renderMarkdownLite(content);
             els.recBox.classList.add('visible');
+            updateExportButtons();
             setStatus('Готово ✓');
         } catch (err) {
             console.error(err);
@@ -142,11 +149,92 @@
         els.children.value = 5;
         els.recBox.classList.remove('visible');
         els.recContent.textContent = '';
+        updateExportButtons();
         setStatus('');
+    }
+
+    /* ---------- Экспорт плана: печать и PDF ---------- */
+
+    const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+
+    // 2026-01-03 → «3 января 2026»
+    function formatDate(iso) {
+        if (!iso) return '';
+        const [y, m, d] = iso.split('-').map(Number);
+        if (!y || !m || !d || !MONTHS[m - 1]) return iso;
+        return `${d} ${MONTHS[m - 1]} ${y}`;
+    }
+
+    // Диапазон дат: 2026-01-03..2026-01-08 → «3–8 января 2026»
+    function formatDateRange(from, to) {
+        if (!from && !to) return '';
+        if (!from) return formatDate(to);
+        if (!to) return formatDate(from);
+
+        const [y1, m1, d1] = from.split('-').map(Number);
+        const [y2, m2, d2] = to.split('-').map(Number);
+        if (!y1 || !y2 || !m1 || !m2) return `${formatDate(from)} – ${formatDate(to)}`;
+
+        if (y1 === y2 && m1 === m2) return `${d1}–${d2} ${MONTHS[m1 - 1]} ${y1}`;
+        if (y1 === y2) return `${d1} ${MONTHS[m1 - 1]} – ${d2} ${MONTHS[m2 - 1]} ${y1}`;
+        return `${formatDate(from)} – ${formatDate(to)}`;
+    }
+
+    // «6 дн. / 5 ноч.», если даты заданы и корректны
+    function tripLength(from, to) {
+        if (!from || !to) return '';
+        const start = new Date(`${from}T00:00:00`);
+        const end = new Date(`${to}T00:00:00`);
+        if (isNaN(start) || isNaN(end)) return '';
+        const nights = Math.round((end - start) / 86400000);
+        if (nights < 0) return '';
+        return `${nights + 1} дн. / ${nights} ноч.`;
+    }
+
+    // Заполняет шапку печатной версии: город, даты, состав
+    function updatePrintHeader() {
+        const city = els.city.value.trim() || 'Казань';
+        const adults = Number(els.adults.value) || 0;
+        const children = Number(els.children.value) || 0;
+
+        els.printTitle.textContent = `Путешествуй! — ${city}`;
+
+        const parts = [];
+        const range = formatDateRange(els.dateFrom.value, els.dateTo.value);
+        if (range) parts.push(range);
+        const length = tripLength(els.dateFrom.value, els.dateTo.value);
+        if (length) parts.push(length);
+        if (adults || children) parts.push(`${adults} взрослых + ${children} детей`);
+        els.printMeta.textContent = parts.join(' · ');
+    }
+
+    // Кнопки экспорта — только когда в блоке есть план
+    function updateExportButtons() {
+        const hasPlan = els.recContent.textContent.trim().length > 0;
+        els.recActions.classList.toggle('hidden', !hasPlan);
+    }
+
+    function printPlan() {
+        if (!els.recContent.textContent.trim()) {
+            setStatus('Сначала получите план', true);
+            return;
+        }
+        updatePrintHeader();
+        window.print();
     }
 
     els.generateBtn.addEventListener('click', generateRecommendations);
     els.clearBtn.addEventListener('click', clearAll);
+    els.printBtn.addEventListener('click', printPlan);
+    els.pdfBtn.addEventListener('click', printPlan);
+
+    // Печать по Ctrl+P и из меню браузера тоже с корректной шапкой
+    window.addEventListener('beforeprint', updatePrintHeader);
+
+    // Начальное состояние
+    updatePrintHeader();
+    updateExportButtons();
 
     // Ctrl+Enter для быстрой генерации
     document.addEventListener('keydown', (e) => {

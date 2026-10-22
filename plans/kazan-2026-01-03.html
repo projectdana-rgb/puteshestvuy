@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Казань 3–8 января · Семейный планировщик (8 взрослых + 5 детей)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1e2b3c;
+            padding: 2rem 1rem;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Шапка */
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #1d4e6f 100%);
+            color: white;
+            padding: 2rem 2rem 1.5rem;
+            border-radius: 2rem 2rem 1rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: "❄️";
+            font-size: 8rem;
+            position: absolute;
+            right: -1rem;
+            bottom: -2rem;
+            opacity: 0.12;
+            transform: rotate(10deg);
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subhead {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+            align-items: center;
+            margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .badge-group {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.35rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        /* Погода и важные заметки */
+        .weather-note {
+            background: #e9f0fa;
+            border-left: 5px solid #1d4e6f;
+            padding: 0.9rem 1.5rem;
+            border-radius: 0.8rem;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem 2rem;
+        }
+
+        .weather-note strong {
+            color: #0b2b44;
+        }
+
+        /* Сетка дней */
+        .days-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 6px 18px rgba(0, 20, 30, 0.05);
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+            transition: transform 0.15s ease, box-shadow 0.2s;
+            border: 1px solid #e6edf4;
+        }
+
+        .day-card:hover {
+            box-shadow: 0 14px 28px rgba(0, 20, 30, 0.08);
+        }
+
+        .day-date {
+            background: #1d4e6f;
+            color: white;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem 1.5rem;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .day-date .number {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+
+        .day-date .month {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.85;
+        }
+
+        .day-date .weekday {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+        }
+
+        .day-content {
+            flex: 1;
+            padding: 1.5rem 1.8rem;
+            min-width: 250px;
+        }
+
+        .day-content h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #0b2b44;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .day-content h2 small {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: #5b7a94;
+            background: #eef4fa;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-list li {
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed #dbe6f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .activity-list li:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            font-size: 1.2rem;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .activity-text {
+            flex: 1;
+        }
+
+        .activity-text strong {
+            font-weight: 600;
+            color: #0b2b44;
+        }
+
+        .meta-tag {
+            display: inline-block;
+            background: #e3eef9;
+            color: #1d4e6f;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            margin-left: 0.4rem;
+            white-space: nowrap;
+        }
+
+        .kids-note {
+            background: #fff6e0;
+            border-radius: 0.8rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.88rem;
+            margin-top: 0.7rem;
+            color: #7a5a1e;
+            border-left: 4px solid #f0b34b;
+        }
+
+        .kids-note strong {
+            font-weight: 700;
+        }
+
+        /* Практическая информация */
+        .info-panel {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 6px 18px rgba(0, 20, 30, 0.05);
+            border: 1px solid #e6edf4;
+            margin-bottom: 2rem;
+        }
+
+        .info-panel h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0b2b44;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem 1.8rem;
+        }
+
+        .info-item {
+            border-left: 3px solid #1d4e6f;
+            padding-left: 1rem;
+        }
+
+        .info-item .label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #5b7a94;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-item .value {
+            font-weight: 500;
+            font-size: 0.98rem;
+            color: #1e2b3c;
+        }
+
+        .info-item .value small {
+            font-weight: 400;
+            color: #5b7a94;
+            display: block;
+            font-size: 0.85rem;
+            margin-top: 0.15rem;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #7892a8;
+            padding: 2rem 0 1rem;
+            border-top: 1px solid #dbe6f0;
+        }
+
+        /* Мобильные */
+        @media (max-width: 700px) {
+            .header h1 { font-size: 1.7rem; }
+            .day-date { min-width: 90px; padding: 1rem; }
+            .day-date .number { font-size: 1.8rem; }
+            .day-content { padding: 1.2rem; }
+            .day-content h2 { font-size: 1.2rem; flex-wrap: wrap; }
+            .info-panel { padding: 1.2rem; }
+        }
+        /* Панель печати */
+        .plan-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .toolbar-btn {
+            background: #1d4e6f;
+            color: #fff;
+            border: none;
+            border-radius: 0.8rem;
+            padding: 0.65rem 1.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.15s, transform 0.1s;
+        }
+        .toolbar-btn:hover { background: #163f59; }
+        .toolbar-btn:active { transform: scale(0.98); }
+        .toolbar-hint { font-size: 0.8rem; color: #7892a8; }
+
+        /* Печать и сохранение в PDF */
+        @page { size: A4; margin: 15mm; }
+
+        @media print {
+            body {
+                background: #fff !important;
+                padding: 0 !important;
+                font-size: 10.5pt;
+                line-height: 1.45;
+            }
+            .container { max-width: none; margin: 0; padding: 0; }
+            .plan-toolbar { display: none !important; }
+
+            .header {
+                background: none !important;
+                color: #0b2b44 !important;
+                box-shadow: none !important;
+                border: 1.5pt solid #1d4e6f;
+                border-radius: 0 !important;
+                padding: 3mm 4mm;
+                margin-bottom: 4mm;
+            }
+            .header::after { display: none !important; }
+            .header h1 { color: #0b2b44 !important; }
+            .header .subhead { color: #5b7a94 !important; }
+            .badge {
+                background: #eef4fa !important;
+                color: #1d4e6f !important;
+                border: 1px solid #cfdde9;
+            }
+
+            .weather-note, .day-card, .info-panel {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                border: 1px solid #dbe6f0;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .day-date { background: #eef4fa !important; color: #0b2b44 !important; }
+            .activity-list li { break-inside: avoid; page-break-inside: avoid; }
+            .day-content h2 { break-after: avoid; page-break-after: avoid; }
+            .footer-note { border-top: 1px solid #dbe6f0; }
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Шапка -->
+    <div class="header">
+        <h1>Казань · 3–8 января</h1>
+        <div class="subhead">
+            <span>🏠 Семейный планировщик</span>
+            <span>👨‍👩‍👧‍👦 8 взрослых + 5 детей</span>
+        </div>
+        <div class="badge-group">
+            <span class="badge">❄️ Зимняя программа</span>
+            <span class="badge">🕌 Кремль</span>
+            <span class="badge">⛷️ Свияжские холмы</span>
+            <span class="badge">🎭 Экият</span>
+        </div>
+    </div>
+
+
+    <!-- Печать -->
+    <div class="plan-toolbar">
+        <button class="toolbar-btn" type="button" onclick="window.print()">🖨️ Печать / Скачать PDF</button>
+        <span class="toolbar-hint">PDF сохраняется через «Сохранить как PDF» в диалоге печати</span>
+    </div>
+
+    <!-- Погода и важные заметки -->
+    <div class="weather-note">
+        <span>🌡️ <strong>Погода:</strong> Январь в Казани — в среднем около −10 °C, возможны снегопады. Одевайтесь многослойно, обувь — непромокаемая и тёплая.</span>
+        <span>📅 <strong>Праздничный режим:</strong> Казанский Кремль со 2 по 8 января работает в обычном режиме (вход через Спасскую башню — круглосуточно).</span>
+    </div>
+
+    <!-- Карточки дней -->
+    <div class="days-grid">
+        <!-- 1 день -->
+        <div class="day-card">
+            <div class="day-date">
+                <span class="number">03</span>
+                <span class="month">января</span>
+                <span class="weekday">суббота</span>
+            </div>
+            <div class="day-content">
+                <h2>День 1 · Кремль и детектив <small>весь день</small></h2>
+                <ul class="activity-list">
+                    <li>
+                        <span class="activity-icon">🕵️</span>
+                        <span class="activity-text"><strong>Детективный квест по Казанскому Кремлю</strong> — «В поисках клада» / «Тайны казанских драконов». Подходит для детей от 6–7 лет и взрослых; логика, легенды, командная работа.</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">⛪</span>
+                        <span class="activity-text"><strong>Казанский собор и подземный храм</strong> — посещение действующего собора и подземной части.</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🏙️</span>
+                        <span class="activity-text"><strong>Городская панорама</strong> — смотровая площадка / интерактивный комплекс с видом на город.</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🌳</span>
+                        <span class="activity-text"><strong>Прогулка по парку «Чёрное озеро»</strong> — зимние фотографии, детская площадка, каток (по погоде).</span>
+                    </li>
+                </ul>
+                <div class="kids-note">
+                    <strong>Детям:</strong> квест лучше бронировать заранее на группу 13 человек; уточните возрастной порог и необходимость сопровождения взрослых (иногда нужен отдельный билет для взрослого).
+                </div>
+            </div>
+        </div>
+
+        <!-- 2 день -->
+        <div class="day-card">
+            <div class="day-date">
+                <span class="number">04</span>
+                <span class="month">января</span>
+                <span class="weekday">воскресенье</span>
+            </div>
+            <div class="day-content">
+                <h2>День 2 · Туган Авылым и Старо-Татарская слобода <small>первая половина + прогулка</small></h2>
+                <ul class="activity-list">
+                    <li>
+                        <span class="activity-icon">🏡</span>
+                        <span class="activity-text"><strong>Комплекс «Туган Авылым»</strong> — экскурсия о традициях и быте татар, загадки Щурале (по запросу).</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🥟</span>
+                        <span class="activity-text"><strong>Мастер-класс: эчпочмак и чак-чак</strong> — приготовление национальных блюд. Официальный мастер-класс по эчпочмаку: от 600 ₽/чел (при группе от 25 чел), экскурсия — от 600 ₽/чел (от 20 чел).</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🧵</span>
+                        <span class="activity-text"><strong>Старо-Татарская слобода</strong> — прогулка, покупка сувениров, колоритные улочки и дома.</span>
+                    </li>
+                </ul>
+                <div class="kids-note">
+                    <strong>Группе 13 человек:</strong> стоимость мастер-класса/экскурсии может рассчитываться индивидуально (меньше минимальной группы). Уточняйте при бронировании.
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 день -->
+        <div class="day-card">
+            <div class="day-date">
+                <span class="number">05</span>
+                <span class="month">января</span>
+                <span class="weekday">понедельник</span>
+            </div>
+            <div class="day-content">
+                <h2>День 3 · Свияжские холмы <small>горнолыжный день</small></h2>
+                <ul class="activity-list">
+                    <li>
+                        <span class="activity-icon">⛷️</span>
+                        <span class="activity-text"><strong>Горнолыжный курорт «Свияжские холмы»</strong> — трассы разного уровня, тюбинг, детская комната, кафе. Подходит для семей с детьми.</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🎟️</span>
+                        <span class="activity-text"><strong>Бюджет:</strong> в праздничные дни цены выше. Ски-пасс и прокат лучше бронировать заранее; отзывы советуют учитывать высокий чек в новогодние даты.</span>
+                    </li>
+                </ul>
+                <div class="kids-note">
+                    <strong>Альтернатива для тех, кто не катается:</strong> тюбинг-трасса, прогулки, детский центр «Капуста» (по данным курорта).
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 день -->
+        <div class="day-card">
+            <div class="day-date">
+                <span class="number">06</span>
+                <span class="month">января</span>
+                <span class="weekday">вторник</span>
+            </div>
+            <div class="day-content">
+                <h2>День 4 · Театр «Экият» + свободное время <small>гибкий день</small></h2>
+                <ul class="activity-list">
+                    <li>
+                        <span class="activity-icon">🎭</span>
+                        <span class="activity-text"><strong>Театр кукол «Экият»</strong> — ул. Петербургская, 57. В репертуаре — спектакли для детей (например, «Приключения Чебурашки», «Кошкин дом» и др.). Билеты от ~400–600 ₽.</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">☕</span>
+                        <span class="activity-text"><strong>Свободное время:</strong> отдых, кафе, прогулки по центру или посещение аквапарка/музея по желанию группы.</span>
+                    </li>
+                </ul>
+                <div class="kids-note">
+                    <strong>Важно:</strong> репертуар на 3–8 января уточняйте на официальном сайте театра или в кассах; билеты на праздничные даты разбирают заранее.
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 день -->
+        <div class="day-card">
+            <div class="day-date">
+                <span class="number">07</span>
+                <span class="month">января</span>
+                <span class="weekday">среда</span>
+            </div>
+            <div class="day-content">
+                <h2>День 5 · Свободный день <small>по выбору семьи</small></h2>
+                <ul class="activity-list">
+                    <li>
+                        <span class="activity-icon">🛍️</span>
+                        <span class="activity-text"><strong>Шопинг и сувениры:</strong> ул. Баумана, торговые центры, местные сладости (чак-чак, талкыш-калеве).</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🏛️</span>
+                        <span class="activity-text"><strong>Музеи по интересам:</strong> Национальный музей РТ, музей ИЗО, дом-музей Тукая — варианты для взрослых и детей.</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🏊</span>
+                        <span class="activity-text"><strong>Аквапарк «Ривьера»</strong> или отдых в отеле — хороший вариант в морозный день.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 6 день -->
+        <div class="day-card">
+            <div class="day-date">
+                <span class="number">08</span>
+                <span class="month">января</span>
+                <span class="weekday">четверг</span>
+            </div>
+            <div class="day-content">
+                <h2>День 6 · Свободное утро / отъезд <small>запас времени</small></h2>
+                <ul class="activity-list">
+                    <li>
+                        <span class="activity-icon">🧳</span>
+                        <span class="activity-text"><strong>Свободное время</strong> — неспешный завтрак, последние сувениры, сборы.</span>
+                    </li>
+                    <li>
+                        <span class="activity-icon">🚕</span>
+                        <span class="activity-text"><strong>Трансфер:</strong> с учётом зимней погоды закладывайте больше времени до аэропорта/вокзала.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Панель важных заметок -->
+    <div class="info-panel">
+        <h3>📌 Важные заметки для группы 13 человек</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">Мастер-классы</div>
+                <div class="value">«Туган Авылым» <small>Минимальная группа для стандартных тарифов — 20–25 чел. Для 13 человек запрашивайте индивидуальный расчёт.</small></div>
+            </div>
+            <div class="info-item">
+                <div class="label">Квест в Кремле</div>
+                <div class="value">Бронировать заранее <small>Популярные программы («Тайны казанских драконов») часто распроданы; уточняйте наличие на 3–4 января.</small></div>
+            </div>
+            <div class="info-item">
+                <div class="label">Свияжские холмы</div>
+                <div class="value">Праздничный чек <small>Отзывы предупреждают о высоких ценах на прокат и подъёмники в новогодние дни; планируйте бюджет с запасом.</small></div>
+            </div>
+            <div class="info-item">
+                <div class="label">Театр «Экият»</div>
+                <div class="value">Билеты заранее <small>На январь 2026 в афише были спектакли для детей; проверяйте точные даты и время на 6 января.</small></div>
+            </div>
+            <div class="info-item">
+                <div class="label">Транспорт</div>
+                <div class="value">Минивэн / 2 такси <small>Для 13 человек удобнее заранее заказать минивэн или разделиться на 2 машины при поездках за город.</small></div>
+            </div>
+            <div class="info-item">
+                <div class="label">Одежда</div>
+                <div class="value">Зимняя, непромокаемая <small>Январь в Казани снежный; для детей — запасные варежки и тёплые стельки.</small></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        Планировщик создан для семьи 8+5 · Казань, 3–8 января · Проверяйте актуальные цены и режим работы перед поездкой
+    </div>
+</div>
+</body>
+</html>

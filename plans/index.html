@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Готовые планы · Путешествуй!</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, 'Segoe UI', Roboto, sans-serif; }
+        body { background: #f4f7fb; color: #1e2b3c; padding: 2rem 1rem; line-height: 1.5; }
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #1d4e6f 100%);
+            color: #fff; padding: 2rem; border-radius: 2rem 2rem 1rem 1rem;
+            margin-bottom: 2rem; box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            position: relative; overflow: hidden;
+        }
+        .header::after {
+            content: "❄️"; font-size: 8rem; position: absolute; right: -1rem;
+            bottom: -2rem; opacity: 0.12; transform: rotate(10deg);
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.4rem; position: relative; z-index: 1; }
+        .header .subhead { font-size: 1.1rem; opacity: 0.9; position: relative; z-index: 1; }
+        .header a { color: #cfe3f7; position: relative; z-index: 1; }
+
+        .plans-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.4rem; margin-bottom: 3rem;
+        }
+        .plan-card {
+            background: #fff; border-radius: 1.5rem; padding: 1.8rem 2rem;
+            box-shadow: 0 6px 18px rgba(0,20,30,0.05); border: 1px solid #e6edf4;
+            display: flex; flex-direction: column; gap: 0.9rem;
+            transition: transform 0.15s, box-shadow 0.2s;
+        }
+        .plan-card:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,20,30,0.08); }
+        .plan-city { font-size: 1.4rem; font-weight: 700; color: #0b2b44; }
+        .plan-dates { font-size: 0.95rem; color: #5b7a94; }
+        .badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .badge {
+            background: #e3eef9; color: #1d4e6f; font-size: 0.78rem; font-weight: 600;
+            padding: 0.25rem 0.8rem; border-radius: 40px;
+        }
+        .plan-card .btn {
+            margin-top: auto; align-self: flex-start; text-decoration: none;
+            background: #1d4e6f; color: #fff; padding: 0.65rem 1.5rem;
+            border-radius: 0.8rem; font-size: 0.95rem; font-weight: 600;
+            transition: background 0.15s;
+        }
+        .plan-card .btn:hover { background: #163f59; }
+
+        .footer-note {
+            text-align: center; font-size: 0.85rem; color: #7892a8;
+            padding: 2rem 0 1rem; border-top: 1px solid #dbe6f0;
+        }
+
+        @media (max-width: 700px) {
+            .header h1 { font-size: 1.7rem; }
+            .plan-card { padding: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Готовые планы</h1>
+        <div class="subhead">
+            Сохранённые маршруты, которые можно открыть, распечатать или сохранить в PDF.
+            &nbsp;<a href="../index.html">← К планировщику</a>
+        </div>
+    </div>
+
+    <div class="plans-grid">
+        <div class="plan-card">
+            <div class="plan-city">Казань</div>
+            <div class="plan-dates">3–8 января 2026 · 6 дней / 5 ночей</div>
+            <div class="badges">
+                <span class="badge">👨‍👩‍👧‍👦 8 взрослых + 5 детей</span>
+                <span class="badge">❄️ Зимняя программа</span>
+                <span class="badge">🕌 Кремль</span>
+                <span class="badge">🎭 Экият</span>
+            </div>
+            <a class="btn" href="kazan-2026-01-03.html">Открыть план →</a>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        Планы собраны планировщиком «Путешествуй!» · Проверяйте актуальные цены и режим работы перед поездкой
+    </div>
+</div>
+</body>
+</html>
