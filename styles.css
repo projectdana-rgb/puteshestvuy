@@ -1,0 +1,83 @@
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, 'Segoe UI', Roboto, sans-serif; }
+        body { background: #f4f7fb; color: #1e2b3c; padding: 2rem 1rem; line-height: 1.5; }
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .header {
+            background: linear-gradient(135deg, #0b2b44 0%, #1d4e6f 100%);
+            color: #fff; padding: 2rem; border-radius: 2rem 2rem 1rem 1rem;
+            margin-bottom: 2rem; box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            position: relative; overflow: hidden;
+        }
+        .header::after {
+            content: "❄️"; font-size: 8rem; position: absolute; right: -1rem;
+            bottom: -2rem; opacity: 0.12; transform: rotate(10deg);
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 0.4rem; position: relative; z-index: 1; }
+        .header .subhead { font-size: 1.1rem; opacity: 0.9; position: relative; z-index: 1; }
+
+        /* Панель параметров */
+        .controls {
+            background: #fff; border-radius: 1.5rem; padding: 1.8rem 2rem;
+            box-shadow: 0 6px 18px rgba(0,20,30,0.05); border: 1px solid #e6edf4;
+            margin-bottom: 2rem;
+        }
+        .controls h2 { font-size: 1.3rem; color: #0b2b44; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+        .form-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem 1.5rem; margin-bottom: 1.2rem;
+        }
+        .field { display: flex; flex-direction: column; gap: 0.35rem; }
+        .field label { font-size: 0.85rem; font-weight: 600; color: #5b7a94; text-transform: uppercase; letter-spacing: 0.03em; }
+        .field input {
+            padding: 0.65rem 0.9rem; border: 1px solid #cfdde9; border-radius: 0.7rem;
+            font-size: 1rem; background: #fbfdff; transition: border 0.15s, box-shadow 0.15s;
+        }
+        .field input:focus { outline: none; border-color: #1d4e6f; box-shadow: 0 0 0 3px rgba(29,78,111,0.12); }
+        .field input[type="password"] { font-family: monospace; }
+        .hint { font-size: 0.78rem; color: #7892a8; margin-top: 0.15rem; }
+
+        .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; }
+        .btn {
+            padding: 0.75rem 1.6rem; border: none; border-radius: 0.8rem;
+            font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, opacity 0.15s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background: #1d4e6f; color: #fff; }
+        .btn-primary:hover { background: #163f59; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-secondary { background: #e3eef9; color: #1d4e6f; }
+        .btn-secondary:hover { background: #d3e4f5; }
+
+        .status { font-size: 0.9rem; color: #5b7a94; }
+        .status.error { color: #b23b3b; }
+
+        /* Рекомендации */
+        .recommendations {
+            background: #fff; border-radius: 1.5rem; padding: 1.8rem 2rem;
+            box-shadow: 0 6px 18px rgba(0,20,30,0.05); border: 1px solid #e6edf4;
+            margin-bottom: 2rem; display: none;
+        }
+        .recommendations.visible { display: block; }
+        .recommendations h2 { font-size: 1.3rem; color: #0b2b44; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+        .rec-content { white-space: pre-wrap; font-size: 0.98rem; color: #1e2b3c; line-height: 1.6; }
+        .rec-content h3 { color: #1d4e6f; margin: 1rem 0 0.4rem; font-size: 1.1rem; }
+        .rec-content h4 { color: #1d4e6f; margin: 0.8rem 0 0.3rem; font-size: 1rem; }
+        .rec-content strong { color: #0b2b44; font-weight: 700; }
+        .rec-content em { color: #45678a; }
+
+        /* Списки без маркеров: ни точек, ни звёзд — только отступ */
+        .rec-content ul, .rec-content ol { list-style: none; margin: 0.25rem 0; padding-left: 1.15rem; }
+        .rec-item { margin: 0.25rem 0; padding-left: 1.15rem; }
+
+        .footer-note {
+            text-align: center; font-size: 0.85rem; color: #7892a8;
+            padding: 2rem 0 1rem; border-top: 1px solid #dbe6f0;
+        }
+
+        @media (max-width: 700px) {
+            .header h1 { font-size: 1.7rem; }
+            .controls { padding: 1.2rem; }
+            .actions { flex-direction: column; align-items: stretch; }
+            .btn { width: 100%; }
+        }
+    
